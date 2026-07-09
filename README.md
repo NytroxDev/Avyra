@@ -56,4 +56,5 @@ clear, register, edge cases, and thread safety.
 python example/chat.py
 python example/downloader.py
 python example/once_usage.py
+python example/async_usage.py
 ```
