@@ -5,6 +5,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://python.org)
 [![Tests](https://img.shields.io/badge/tests-70%20passed-green)](tests/)
+[![PyPI](https://img.shields.io/badge/pypi-avyra-blue)](https://pypi.org/project/avyra/)
+
+```bash
+pip install avyra
+```
 
 ```python
 from enum import Enum, auto
