@@ -1,8 +1,6 @@
 import threading
 from enum import Enum, auto
 
-import pytest
-
 from avyra import EventBus
 
 

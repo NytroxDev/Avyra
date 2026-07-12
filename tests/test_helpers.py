@@ -1,6 +1,6 @@
-import pytest
-
 from enum import Enum, auto
+
+import pytest
 
 from avyra.core._base import _iter_members, _original_sub
 
@@ -43,9 +43,11 @@ class TestOriginalSub:
         def wrapper():
             pass
 
-        wrapper._original = f  # type: ignore[attr-defined]
+        wrapper.__wrapped__ = f
         assert _original_sub(wrapper) is f
 
     def test_lambda(self):
-        f = lambda: None
+        def f():
+            pass
+
         assert _original_sub(f) is f
