@@ -32,5 +32,5 @@ if __name__ == "__main__":
     failed = bus.emit(AppEvent.SHUTDOWN, None)
     bus.emit(AppEvent.SHUTDOWN, None)  # nothing — auto-unsub even after crash
 
-    for handler, exc in failed:
+    for _handler, exc in failed:
         print(f"  Caught: {exc}")

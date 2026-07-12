@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import functools
-from enum import Enum
+from typing import TYPE_CHECKING
 
 from ._base import Subscriber, _BaseEventBus
+
+if TYPE_CHECKING:
+    from enum import Enum
 
 
 class EventBus(_BaseEventBus):
