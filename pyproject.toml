@@ -31,8 +31,8 @@ Homepage = "https://github.com/Nytrox/avyra"
 Repository = "https://github.com/Nytrox/avyra"
 
 [project.optional-dependencies]
-dev = ["pytest"]
-test = ["pytest"]
+dev = ["pytest", "pytest-asyncio"]
+test = ["pytest", "pytest-asyncio"]
 
 [tool.hatch.version]
 path = "avyra/version.py"
