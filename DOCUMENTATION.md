@@ -118,8 +118,8 @@ automatically unsubscribed — even if it raises.
 | `event_type` | `Enum \| type[Enum]` | Member or class (one wrapper per member). |
 | `function`   | `Subscriber`         | The callable to invoke once.              |
 
-The wrapper exposes `._original` so `has_subscriber` and `unsubscribe`
-recognise it by the original function.
+The wrapper uses ``functools.wraps`` so ``has_subscriber`` and
+``unsubscribe`` recognise it by the original function (via ``__wrapped__``).
 
 ```python
 bus.once(Message.CONNECTED, on_connected)

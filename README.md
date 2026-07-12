@@ -3,8 +3,8 @@
 > **v1.0.0** : Lightweight, thread-safe publish-subscribe event bus.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://python.org)
-[![Tests](https://img.shields.io/badge/tests-70%20passed-green)](tests/)
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://python.org)
+[![Tests](https://img.shields.io/badge/tests-82%20passed-green)](tests/)
 [![PyPI](https://img.shields.io/badge/pypi-avyra-blue)](https://pypi.org/project/avyra/)
 
 ```bash
@@ -33,7 +33,7 @@ bus.emit(Message.SENT, "Hello!")
 - **Thread-safe** : RLock-protected mutations, snapshot dispatch.
 - **Zero dependencies** : pure Python.
 
-**[Documentation →](DOCUMENTATION.md)**  |  **[Changelog →](CHANGELOG.MD)**  |  **[License →](LICENSE)**
+**[Guide →](GUIDE.md)**  |  **[Documentation →](DOCUMENTATION.md)**  |  **[Changelog →](CHANGELOG.MD)**  |  **[License →](LICENSE)**
 
 ## Why Avyra?
 
@@ -47,7 +47,7 @@ direct coupling.
 python -m pytest tests/ -v
 ```
 
-70 tests covering subscribe, unsubscribe, emit, once, has_subscriber,
+82 tests covering subscribe, unsubscribe, emit, once, has_subscriber,
 clear, register, edge cases, and thread safety.
 
 ### Examples
