@@ -1,6 +1,6 @@
 # Avyra Documentation
 
-Full API reference for `avyra` v1.0.0.
+Full API reference for `avyra` v1.1.0.
 
 ---
 

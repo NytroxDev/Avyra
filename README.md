@@ -1,6 +1,6 @@
 # Avyra
 
-> **v1.0.0** : Lightweight, thread-safe publish-subscribe event bus.
+> **v1.1.0** : Lightweight, thread-safe publish-subscribe event bus.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://python.org)
