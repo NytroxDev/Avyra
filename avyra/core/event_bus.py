@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 from enum import Enum
 
 from ._base import Subscriber, _BaseEventBus
@@ -74,11 +75,11 @@ class EventBus(_BaseEventBus):
                 nor an ``Enum`` class.
             ValueError: If a member is unknown.
         """
+        @functools.wraps(function)
         def wrapper(event: Enum, payload: object | None) -> None:
             try:
                 function(event, payload)
             finally:
                 self.unsubscribe(event, function)
 
-        wrapper._original = function  # type: ignore[attr-defined]
         self.subscribe(event_type, wrapper)

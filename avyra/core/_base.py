@@ -2,12 +2,9 @@ from __future__ import annotations
 
 import threading
 from enum import Enum
-from typing import Awaitable, Callable, Optional, Union
+from typing import Awaitable, Callable
 
-Subscriber = Union[
-    Callable[[Enum, Optional[object]], None],
-    Callable[[Enum, Optional[object]], Awaitable[None]],
-]
+Subscriber = Callable[[Enum, object | None], None] | Callable[[Enum, object | None], Awaitable[None]]
 
 
 def _iter_members(event_type: Enum | type[Enum] | list[Enum]) -> list[Enum]:
@@ -25,7 +22,7 @@ def _iter_members(event_type: Enum | type[Enum] | list[Enum]) -> list[Enum]:
 
 def _original_sub(func: Subscriber) -> Subscriber:
     """Return the original function wrapped by *func*, or *func* itself."""
-    return getattr(func, "_original", func)
+    return getattr(func, "__wrapped__", func)
 
 
 class _BaseEventBus:
@@ -39,7 +36,7 @@ class _BaseEventBus:
         self._subscribers: dict[Enum, list[Subscriber]] = {}
         self._sub_lock = threading.RLock()
 
-    def _get_sub(self, event_type: Enum) -> Optional[list[Subscriber]]:
+    def _get_sub(self, event_type: Enum) -> list[Subscriber] | None:
         """Return a lock-safe shallow copy of the subscriber list."""
         with self._sub_lock:
             lst = self._subscribers.get(event_type, None)

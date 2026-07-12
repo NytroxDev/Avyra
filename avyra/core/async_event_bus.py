@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import functools
 from enum import Enum
 
 from ._base import Subscriber, _BaseEventBus
@@ -54,6 +55,7 @@ class AsyncEventBus(_BaseEventBus):
         unsubscribes after the first :meth:`emit` — even if the
         function raises.
         """
+        @functools.wraps(function)
         async def wrapper(event: Enum, payload: object | None) -> None:
             try:
                 result = function(event, payload)
@@ -62,5 +64,4 @@ class AsyncEventBus(_BaseEventBus):
             finally:
                 self.unsubscribe(event, function)
 
-        wrapper._original = function  # type: ignore[attr-defined]
         self.subscribe(event_type, wrapper)
