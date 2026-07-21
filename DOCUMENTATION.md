@@ -1,6 +1,6 @@
 # Avyra Documentation
 
-Full API reference for `avyra` v1.1.0.
+Full API reference for `avyra` v1.2.0.
 
 ---
 
@@ -31,38 +31,45 @@ bus.register([Message.SENT])     # specific members
 
 ---
 
-## `subscribe(event_type, function)`
+## `subscribe(event_type, function, priority=0)`
 
 Register *function* for *event_type*.
 
-| Parameter    | Type                 | Description                                      |
-|--------------|----------------------|--------------------------------------------------|
-| `event_type` | `Enum \| type[Enum]` | Member or class (subscribes to **all** members). |
-| `function`   | `Subscriber`         | `Callable[[Enum, object \| None], None]`         |
+| Parameter    | Type                 | Description                                                        |
+|--------------|----------------------|--------------------------------------------------------------------|
+| `event_type` | `Enum \| type[Enum]` | Member or class (subscribes to **all** members).                   |
+| `function`   | `Subscriber`         | `Callable[[Enum, object \| None], None]`                           |
+| `priority`   | `int`                | Execution order (default ``0``). Lower values run first.           |
 
 Raises `ValueError` if already subscribed or unknown event type.
 
 ```python
 bus.subscribe(Message.SENT, handler)
-bus.subscribe(Message, handler)          # all members
+bus.subscribe(Message.SENT, urgent_handler, priority=-10)  # runs first
+bus.subscribe(Message, handler)                            # all members
 ```
 
 ---
 
-## `on(event_type)` *(decorator)*
+## `on(event_type, priority=0)` *(decorator)*
 
 Decorator shorthand for :meth:`subscribe`.
 
-| Parameter    | Type                 | Description                                      |
-|--------------|----------------------|--------------------------------------------------|
-| `event_type` | `Enum \| type[Enum]` | Member or class (subscribes to **all** members). |
+| Parameter    | Type                 | Description                                                        |
+|--------------|----------------------|--------------------------------------------------------------------|
+| `event_type` | `Enum \| type[Enum]` | Member or class (subscribes to **all** members).                   |
+| `priority`   | `int`                | Execution order (default ``0``). Lower values run first.           |
 
 ```python
 @bus.on(Message.SENT)
 def handler(event, payload):
     ...
 
-@bus.on(Message)                      # all members
+@bus.on(Message.SENT, priority=-10)
+def early_handler(event, payload):
+    ...
+
+@bus.on(Message)                           # all members
 def handler_all(event, payload):
     ...
 ```
@@ -89,7 +96,8 @@ bus.unsubscribe(Message, handler)        # all members
 
 ## `emit(event, payload=None) → list[tuple[Subscriber, Exception]]`
 
-Dispatch *event* to all subscribers.
+Dispatch *event* to all subscribers. Subscribers are invoked in
+priority order (lower values first).
 
 | Parameter | Type             | Description                               |
 |-----------|------------------|-------------------------------------------|
@@ -108,21 +116,23 @@ for handler, exc in failed:
 
 ---
 
-## `once(event_type, function)`
+## `once(event_type, function, priority=0)`
 
 One-shot subscription. *function* fires at most once, then is
 automatically unsubscribed — even if it raises.
 
-| Parameter    | Type                 | Description                               |
-|--------------|----------------------|-------------------------------------------|
-| `event_type` | `Enum \| type[Enum]` | Member or class (one wrapper per member). |
-| `function`   | `Subscriber`         | The callable to invoke once.              |
+| Parameter    | Type                 | Description                                                        |
+|--------------|----------------------|--------------------------------------------------------------------|
+| `event_type` | `Enum \| type[Enum]` | Member or class (one wrapper per member).                          |
+| `function`   | `Subscriber`         | The callable to invoke once.                                       |
+| `priority`   | `int`                | Execution order (default ``0``). Lower values run first.           |
 
 The wrapper uses ``functools.wraps`` so ``has_subscriber`` and
 ``unsubscribe`` recognise it by the original function (via ``__wrapped__``).
 
 ```python
 bus.once(Message.CONNECTED, on_connected)
+bus.once(Message.CONNECTED, on_connected_urgent, priority=-5)
 ```
 
 ---
@@ -166,7 +176,8 @@ bus.clear(Message)                     # clear everything
 
 `AsyncEventBus` exposes the **same API** as `EventBus` (`subscribe`,
 `unsubscribe`, `once`, `has_subscriber`, `clear`), but its `emit` and
-`once` support **both sync and async** subscribers.
+`once` support **both sync and async** subscribers. Priority works
+identically — lower values run first.
 
 ```python
 from avyra import AsyncEventBus
@@ -218,7 +229,8 @@ await bus.emit(AppEvent.STARTUP, None)   # silent
 ### `_get_sub(event_type) → list[Subscriber] | None`
 
 Return a lock-safe shallow copy of the subscriber list for a single
-member. Returns `None` if no subscribers exist.
+member, sorted by priority (lowest first). Returns `None` if no
+subscribers exist.
 
 ### `_original_sub(func) → Subscriber`
 

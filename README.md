@@ -1,10 +1,10 @@
 # Avyra
 
-> **v1.1.0** : Lightweight, thread-safe publish-subscribe event bus.
+> **v1.2.0** : Lightweight, thread-safe publish-subscribe event bus.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://python.org)
-[![Tests](https://img.shields.io/badge/tests-82%20passed-green)](tests/)
+[![Tests](https://img.shields.io/badge/tests-107%20passed-green)](tests/)
 [![PyPI](https://img.shields.io/badge/pypi-avyra-blue)](https://pypi.org/project/avyra/)
 
 ```bash
@@ -31,6 +31,7 @@ bus.emit(Message.SENT, "Hello!")
 
 - **Typed events** : `Enum` members, not strings.
 - **Thread-safe** : RLock-protected mutations, snapshot dispatch.
+- **Priority** : subscriber execution order via ``priority`` parameter.
 - **Zero dependencies** : pure Python.
 
 **[Guide →](GUIDE.md)**  |  **[Documentation →](DOCUMENTATION.md)**  |  **[Changelog →](CHANGELOG.MD)**  |  **[License →](LICENSE)**
@@ -47,8 +48,8 @@ direct coupling.
 python -m pytest tests/ -v
 ```
 
-82 tests covering subscribe, unsubscribe, emit, once, has_subscriber,
-clear, register, edge cases, and thread safety.
+107 tests covering subscribe, unsubscribe, emit, once, has_subscriber,
+clear, register, priority, edge cases, and thread safety.
 
 ### Examples
 
