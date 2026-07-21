@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.0
+
+- **`subscribe(event_type, function, priority=0)`** : new optional ``priority`` parameter controls dispatch order. Lower values execute first, default is ``0`` ([5b5742c](https://github.com/Nytrox/avyra/commit/5b5742c)).
+- **`on(event_type, priority=0)`** : decorator now accepts ``priority`` — ``@bus.on(Event.FOO, priority=-10)`` runs before default subscribers ([5b5742c](https://github.com/Nytrox/avyra/commit/5b5742c)).
+- **`once(event_type, function, priority=0)`** : one-shot subscriptions also respect priority ordering ([5b5742c](https://github.com/Nytrox/avyra/commit/5b5742c)).
+- **`_get_sub()`** : subscriber snapshot now sorts by priority before returning — stable sort preserves registration order for equal priorities ([5b5742c](https://github.com/Nytrox/avyra/commit/5b5742c)).
+- **`emit()`** : subscribers are dispatched in priority order (previously registration order only) ([5b5742c](https://github.com/Nytrox/avyra/commit/5b5742c)).
+- **Docstrings** : updated ``subscribe``, ``on``, ``once``, ``emit`` with ``priority`` parameter docs and Args sections ([926363a](https://github.com/Nytrox/avyra/commit/926363a)).
+- **Test suite** : 25 new tests covering priority ordering, unsubscribe with priority, once + priority, decorator priority, async priority, edge cases (crash mid-dispatch, extreme values, duplicate priorities) ([a64c392](https://github.com/Nytrox/avyra/commit/a64c392)).
+
 ## 1.1.0
 
 - Unified type annotations (``Union[...]``/``Optional[...]`` → ``X | Y``).
