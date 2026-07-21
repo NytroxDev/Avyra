@@ -61,6 +61,7 @@ class EventBus(_BaseEventBus):
             self,
             event_type: Enum | type[Enum],
             function: Subscriber,
+            priority: int = 0,
     ) -> None:
         """Register *function* to fire at most once for *event_type*.
 
@@ -85,4 +86,4 @@ class EventBus(_BaseEventBus):
             finally:
                 self.unsubscribe(event, function)
 
-        self.subscribe(event_type, wrapper)
+        self.subscribe(event_type, wrapper, priority)
