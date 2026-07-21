@@ -28,9 +28,10 @@ class AsyncEventBus(_BaseEventBus):
         """Dispatch *event* with *payload* to all its subscribers.
 
         Sync subscribers are called directly; async subscribers are
-        awaited.  If any subscriber raises, the remaining subscribers
-        are still invoked.  Returns a list of ``(subscriber, exception)``
-        for every failed call.
+        awaited.  Subscribers are invoked in priority order (lower
+        priority values first).  If any subscriber raises, the remaining
+        subscribers are still invoked.  Returns a list of
+        ``(subscriber, exception)`` for every failed call.
         """
         subs = self._get_sub(event)
 
@@ -58,6 +59,12 @@ class AsyncEventBus(_BaseEventBus):
         Works with both sync and async functions.  Automatically
         unsubscribes after the first :meth:`emit` — even if the
         function raises.
+
+        Args:
+            event_type: An ``Enum`` member or an ``Enum`` class.
+            function: The callable to invoke once.
+            priority: Execution order priority (default ``0``).
+                Lower values run first.
         """
         @functools.wraps(function)
         async def wrapper(event: Enum, payload: object | None) -> None:

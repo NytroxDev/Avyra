@@ -70,7 +70,22 @@ class _BaseEventBus:
             function: Subscriber,
             priority: int = 0,
     ) -> None:
-        """Register *function* as a subscriber for *event_type*."""
+        """Register *function* as a subscriber for *event_type*.
+
+        Subscribers with lower priority values are invoked first.
+
+        Args:
+            event_type: An ``Enum`` member or an ``Enum`` class.
+            function: The callable to invoke when the event fires.
+            priority: Execution order priority (default ``0``).
+                Lower values run first.
+
+        Raises:
+            TypeError: If *event_type* is neither an ``Enum`` member
+                nor an ``Enum`` class.
+            ValueError: If *function* is already subscribed to *event_type*
+                or if a member is unknown.
+        """
         with self._sub_lock:
             for member in _iter_members(event_type):
                 if member not in self._subscribers:
@@ -138,7 +153,16 @@ class _BaseEventBus:
             def handler(event, payload):
                 ...
 
+            @bus.on(Event.FOO, priority=-10)
+            def early_handler(event, payload):
+                ...
+
         This is equivalent to ``bus.subscribe(Event.FOO, handler)``.
+
+        Args:
+            event_type: An ``Enum`` member or an ``Enum`` class.
+            priority: Execution order priority (default ``0``).
+                Lower values run first.
         """
         def decorator(function: Subscriber) -> Subscriber:
             self.subscribe(event_type, function, priority)

@@ -27,9 +27,10 @@ class EventBus(_BaseEventBus):
     ) -> list[tuple[Subscriber, Exception]]:
         """Dispatch *event* with *payload* to all its subscribers.
 
-        Subscribers are invoked synchronously in registration order. A
-        snapshot of the subscriber list is taken under the lock so that
-        concurrent modifications do not affect the current dispatch.
+        Subscribers are invoked synchronously in priority order (lower
+        priority values first). A snapshot of the subscriber list is
+        taken under the lock so that concurrent modifications do not
+        affect the current dispatch.
 
         If a subscriber raises an exception, it is caught and the
         remaining subscribers are still called.  The list of failed
@@ -73,6 +74,8 @@ class EventBus(_BaseEventBus):
         Args:
             event_type: An ``Enum`` member or an ``Enum`` class.
             function: The callable to invoke once.
+            priority: Execution order priority (default ``0``).
+                Lower values run first.
 
         Raises:
             TypeError: If *event_type* is neither an ``Enum`` member
